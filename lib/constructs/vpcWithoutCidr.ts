@@ -6,6 +6,10 @@ export class Network extends Construct {
     constructor(scope: Construct, id: string) {
         super(scope, id);
 
+        // Internet Gatewayの作成
+        const igw = new ec2.CfnInternetGateway(this, 'InternetGateway');
+
+        // VPCの作成
         const vpc = new ec2.Vpc(this, "VPC", {
             ipAddresses: ec2.IpAddresses.cidr("10.0.0.0/16"), // cidr: '10.0.0.0/16'はdeprecated
             // vpcName: best practiceはつけない？？

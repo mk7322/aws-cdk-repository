@@ -4,4 +4,9 @@ import * as cdk from 'aws-cdk-lib';
 import { AwsCdkRepoStack } from '../lib/aws-cdk-repo-stack';
 
 const app = new cdk.App();
-new AwsCdkRepoStack(app, 'AwsCdkRepoStack');
+new AwsCdkRepoStack(app, 'AwsCdkRepoStack', {
+    env: {
+        account: 'XXXXXXXXXXXX',
+        region: 'ap-northeast-1'
+    }
+});
