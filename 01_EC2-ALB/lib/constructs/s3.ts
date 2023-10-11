@@ -28,7 +28,7 @@ export class S3 extends Construct {
         const webHostBucket = new s3.Bucket(this, "WebHostBucket", {
             removalPolicy: RemovalPolicy.DESTROY,
             blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-            enforceSSL: true,
+            // enforceSSL: true,
         });
         this.webHostBucket = webHostBucket;
     }
