@@ -20,6 +20,8 @@ export class Sg extends Construct {
             allowAllOutbound: true,
         });
         this.albSg = albSg;
+        albSg.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(80), 'Allow all HTTP traffic');
+        albSg.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(443), 'Allow all HTTPS traffic');
 
 
         // EC2 用 SG の作成

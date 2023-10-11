@@ -1,4 +1,3 @@
-import { Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 
@@ -36,5 +35,19 @@ export class Network extends Construct {
             enableDnsHostnames: true,
             enableDnsSupport: true,
         });
+
+        // SSM 用のエンドポイントの作成　サブネット指定が必要
+        // vpc.addInterfaceEndpoint('SSMEndpoint', {
+        //     service: ec2.InterfaceVpcEndpointAwsService.SSM,
+        // });
+        // vpc.addInterfaceEndpoint('EC2MessagesEndpoint', {
+        //     service: ec2.InterfaceVpcEndpointAwsService.EC2_MESSAGES,
+        // });
+        // vpc.addInterfaceEndpoint('SSMMessagesEndpoint', {
+        //     service: ec2.InterfaceVpcEndpointAwsService.SSM_MESSAGES,
+        // });
+        // vpc.addGatewayEndpoint("S3Endpoint", {
+        //     service: ec2.GatewayVpcEndpointAwsService.S3,
+        // });
     }
 }

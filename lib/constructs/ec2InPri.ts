@@ -33,6 +33,23 @@ export class Ec2 extends Construct {
         //     'sudo yum install -y php-cli php-fpm php-json php-pdo php-mysqlnd php-zip php-gd php-mbstring php-curl php-xml php-pear php-bcmath'
         // );
 
+        // const userData = ec2.UserData.forLinux({ shebang: '#!/bin/bash' });
+        // userData.addCommands(
+        //     'sudo yum update -y',
+        //     'sudo yum install -y httpd',
+        //     'sudo systemctl start httpd',
+        //     'sudo systemctl enable httpd',
+        //     'echo "<h1>Hello from Apache on Amazon Linux 2</h1>" > /var/www/html/index.html',
+        // );
+
+        const userData = ec2.UserData.forLinux({ shebang: '#!/bin/bash' });
+        userData.addCommands(
+            'sudo yum update -y',
+            'sudo amazon-linux-extras install nginx1.20',
+            'sudo systemctl start nginx',
+            'sudo systemctl enable nginx',
+            'echo "<h1>Hello from Nginx on Amazon Linux 2</h1>" > /usr/share/nginx/html/index.html',
+        );
 
         // プライベートサブネット内のEC2インスタンス01の作成
         const instance01 = new ec2.Instance(this, 'EC2-01', {

@@ -1,4 +1,3 @@
-import { Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 
@@ -82,14 +81,29 @@ export class Network extends Construct {
 
 
         // SSM 用のエンドポイントの作成
-        // vpc.addInterfaceEndpoint('SSMEndpoint', {
-        //     service: ec2.InterfaceVpcEndpointAwsService.SSM,
-        // });
-        // vpc.addInterfaceEndpoint('EC2MessagesEndpoint', {
-        //     service: ec2.InterfaceVpcEndpointAwsService.EC2_MESSAGES,
-        // });
-        // vpc.addInterfaceEndpoint('SSMMessagesEndpoint', {
-        //     service: ec2.InterfaceVpcEndpointAwsService.SSM_MESSAGES,
-        // });
+        vpc.addInterfaceEndpoint('SSMEndpoint', {
+            service: ec2.InterfaceVpcEndpointAwsService.SSM,
+            subnets: {
+                subnets: [pubSub01, pubSub02]
+            }
+        });
+        vpc.addInterfaceEndpoint('EC2MessagesEndpoint', {
+            service: ec2.InterfaceVpcEndpointAwsService.EC2_MESSAGES,
+            subnets: {
+                subnets: [pubSub01, pubSub02]
+            }
+        });
+        vpc.addInterfaceEndpoint('SSMMessagesEndpoint', {
+            service: ec2.InterfaceVpcEndpointAwsService.SSM_MESSAGES,
+            subnets: {
+                subnets: [pubSub01, pubSub02]
+            }
+        });
+        vpc.addGatewayEndpoint("S3Endpoint", {
+            service: ec2.GatewayVpcEndpointAwsService.S3,
+            subnets: [{
+                subnets: [priSub01, priSub02]
+            }]
+        });
     }
 }

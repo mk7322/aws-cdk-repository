@@ -3,7 +3,7 @@ import { Duration } from 'aws-cdk-lib';
 import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 import * as elbv2_targets from 'aws-cdk-lib/aws-elasticloadbalancingv2-targets';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
-import { isIPv4 } from 'net';
+import * as s3 from 'aws-cdk-lib/aws-s3';
 
 export interface AlbProps {
     vpc: ec2.Vpc;
@@ -13,6 +13,7 @@ export interface AlbProps {
     instance01: ec2.Instance;
     instance02: ec2.Instance;
     albSg: ec2.SecurityGroup;
+    albLogBucket: s3.Bucket;
 }
 
 export class Alb extends Construct {
@@ -30,7 +31,6 @@ export class Alb extends Construct {
                 subnets: [props.pubSub01, props.pubSub02]
             },
         });
-
 
         // ALBターゲットグループの作成
         const instanceTarget1 = new elbv2_targets.InstanceTarget(props.instance01);
@@ -52,11 +52,14 @@ export class Alb extends Construct {
                 timeout: Duration.seconds(5),
             },
         });
+        // ALBアクセスログ設定
+        alb.logAccessLogs(props.albLogBucket);
 
         // ALBリスナーの作成
         const albListener = alb.addListener("AlbHttpListener", {
             port: 80,
-            protocol: elbv2.ApplicationProtocol.HTTP
+            protocol: elbv2.ApplicationProtocol.HTTP,
+            open: true,
         });
         albListener.addTargetGroups('TargetGroup', {
             targetGroups: [targetGroup],

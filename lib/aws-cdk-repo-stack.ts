@@ -5,24 +5,26 @@ import { Network } from './constructs/vpcWithCidr';
 import { Ec2, Ec2Props } from './constructs/ec2InPri';
 import { Alb } from './constructs/alb';
 import { Sg } from './constructs/sg';
-import { Endpoint } from './constructs/endpoint';
+import { S3 } from './constructs/s3';
 
 export class AwsCdkRepoStack extends cdk.Stack {
 	constructor(scope: Construct, id: string, props?: cdk.StackProps) {
 		super(scope, id, props);
 
+		// VPCやサブネット、エンドポイント
 		const network = new Network(this, "Network");
 
+		// SG
 		const securityGroup = new Sg(this, "SecurityGroup", {
 			vpc: network.vpc,
 		});
 
-		const endpoint = new Endpoint(this, "Endpoint", {
+		// S3
+		const s3 = new S3(this, "ALBLogBucket", {
 			vpc: network.vpc,
-			priSub01: network.priSub01,
-			priSub02: network.priSub02,
 		});
 
+		// EC2
 		const ec2 = new Ec2(this, "EC2", {
 			vpc: network.vpc,
 			priSub01: network.priSub01,
@@ -31,6 +33,7 @@ export class AwsCdkRepoStack extends cdk.Stack {
 			ec2Sg: securityGroup.ec2Sg,
 		});
 
+		// ALB
 		const alb = new Alb(this, "LB", {
 			vpc: network.vpc,
 			pubSub01: network.pubSub01,
@@ -39,6 +42,7 @@ export class AwsCdkRepoStack extends cdk.Stack {
 			instance01: ec2.instance01,
 			instance02: ec2.instance02,
 			albSg: securityGroup.albSg,
+			albLogBucket: s3.albLogBucket,
 		});
 
 	}
