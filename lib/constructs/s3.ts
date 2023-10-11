@@ -9,18 +9,27 @@ export interface S3Props {
 }
 
 export class S3 extends Construct {
-    public readonly albLogBucket: s3.Bucket;
+    // public readonly albLogBucket: s3.Bucket;
+    public readonly webHostBucket: s3.Bucket;
 
     constructor(scope: Construct, id: string, props: S3Props) {
         super(scope, id);
 
         // ALBアクセスログ用バケットを作成
-        const albLogBucket = new s3.Bucket(this, "ALBLogBucket", {
+        // const albLogBucket = new s3.Bucket(this, "ALBLogBucket", {
+        //     removalPolicy: RemovalPolicy.DESTROY,
+        //     blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+        //     enforceSSL: true,
+        // });
+        // this.albLogBucket = albLogBucket;
+
+
+        // S3 静的websiteホスティング
+        const webHostBucket = new s3.Bucket(this, "WebHostBucket", {
             removalPolicy: RemovalPolicy.DESTROY,
             blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
             enforceSSL: true,
         });
-        this.albLogBucket = albLogBucket;
-
+        this.webHostBucket = webHostBucket;
     }
 }
