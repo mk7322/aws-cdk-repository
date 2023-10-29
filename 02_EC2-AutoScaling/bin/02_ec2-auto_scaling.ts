@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { 02Ec2AutoScalingStack } from '../lib/02_ec2-auto_scaling-stack';
+import { Ec2AutoScalingStack } from '../lib/02_ec2-auto_scaling-stack';
 
 const app = new cdk.App();
-new 02Ec2AutoScalingStack(app, '02Ec2AutoScalingStack', {
+new Ec2AutoScalingStack(app, 'Ec2AutoScalingStack', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */
